@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Uploader</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-image: url('../static/assets/stethoscope-orange-background-space-text-healthcare_185193-6364.avif'); /* Add your background image path here */
+            background-size: cover;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .upload-container {
+            background-color: rgba(255, 255, 255, 0.9); /* White background with transparency */
+            border: 2px solid #007bff; /* Blue border */
+            border-radius: 20px;
+            padding: 40px; /* Increased padding */
+            max-width: 60%; /* Increased max width */
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Increased shadow effect */
+        }
+
+        #file-input {
+            display: none;
+        }
+
+        #file-label {
+            background-color: #007bff;
+            color: #fff;
+            padding: 15px 30px; /* Smaller padding */
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        #file-label:hover {
+            background-color: #0056b3;
+        }
+
+        #preview-image {
+            max-width: 100%;
+            margin-top: 20px;
+        }
+
+        #upload-button-container {
+            margin-top: 20px;
+        }
+
+        .upload-button {
+            align-items: center;
+            background-color: #007bff;
+            color: #fff;
+            padding: 15px 30px; /* Smaller padding */
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .upload-button:hover {
+            background-color: #0056b3;
+        }
+
+        #prediction-results {
+            margin-top: 20px;
+        }
+
+        h3 {
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="upload-container">
+        <h2 style="margin-bottom: 20px;">Upload Your Image</h2>
+        <form action="/predict" method="post" enctype="multipart/form-data">
+            <label for="file-input" id="file-label">Choose File</label>
+            <input type="file" id="file-input" name="file" accept="image/*">
+            <div id="preview-image"></div>
+            <div id="upload-button-container">
+                <button type="submit" class="upload-button">Upload and Predict</button>
+            </div>
+        </form>
+        <div id="prediction-results">
+            {% if vgg16_result %}
+            <h3>VGG16 Prediction:</h3>
+            <p>{{ vgg16_result }}</p>
+            {% endif %}
+            {% if resnet_result %}
+            <h3>ResNet Prediction:</h3>
+            <p>{{ resnet_result }}</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('file-input').addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const preview = document.getElementById('preview-image');
+                const img = new Image();
+                img.src = e.target.result;
+                preview.innerHTML = '';
+                preview.appendChild(img);
+            };
+
+            reader.readAsDataURL(file);
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Image</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        .container {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 1em;
+            text-decoration: none;
+        }
+
+        .file-label {
+            background-color: #007bff;
+            color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: background-color 0.3s ease;
+        }
+
+        .file-label:hover {
+            background-color: #0056b3;
+        }
+
+        #preview-image {
+            max-width: 100%;
+            margin-top: 20px;
+        }
+
+        .btn-group {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Upload Your Image</h2>
+        <form action="/predict_vgg16" method="post" enctype="multipart/form-data">
+            <label for="file-input" class="file-label">Choose File</label>
+            <input type="file" id="file-input" name="image" accept="image/*">
+            <input type="hidden" name="img_path" value="{{ img_path }}"> <!-- Include img_path here -->
+            <img id="preview-image" src="{{ img_path }}" alt="Uploaded Image">
+            <div class="btn-group">
+                <button type="submit" class="btn">VGG16</button>
+            </div>
+        </form>
+        <form action="/predict_resnet" method="post">
+            <input type="hidden" name="img_path" value="{{ img_path }}">
+            <div class="btn-group">
+                <button type="submit" class="btn">ResNet</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
